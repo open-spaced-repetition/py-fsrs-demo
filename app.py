@@ -74,8 +74,8 @@ desired_retention = st.slider(
 # Initialize scheduler with the selected retention value
 if 'desired_retention' not in st.session_state or st.session_state.desired_retention != desired_retention:
     st.session_state.desired_retention = desired_retention
-    st.session_state.scheduler = Scheduler(desired_retention=desired_retention)
-    
+    st.session_state.scheduler = Scheduler(desired_retention=desired_retention, enable_fuzzing=False)
+
 scheduler = st.session_state.scheduler
 
 if 'card' not in st.session_state:
