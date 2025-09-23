@@ -5,22 +5,9 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import math
 
-st.set_page_config(
-    page_title="Py-FSRS Demo",
-    page_icon="osr_logo.png"
-)
-
-# TODO: add link to the demo repo and to py-fsrs
-
-# TODO: add slider for desired retention value
-desired_retention = 0.9
-scheduler = Scheduler(desired_retention=desired_retention)
-
 def display_info(*, card: Card, scheduler: Scheduler):
 
     stability = card.stability
-    FACTOR = scheduler._FACTOR
-    DECAY = scheduler._DECAY
 
     print(f"state = {repr(card.state)}")
     if card.state == State.Review:
@@ -67,6 +54,29 @@ def display_info(*, card: Card, scheduler: Scheduler):
     st.pyplot(plt.gcf())
     plt.clf()
 
+st.set_page_config(
+    page_title="Py-FSRS Demo",
+    page_icon="osr_logo.png"
+)
+
+# TODO: add link to the demo repo and to py-fsrs
+
+# Add slider for desired retention value
+desired_retention = st.slider(
+    "Desired Retention",
+    min_value=0.50,
+    max_value=0.95,
+    value=0.9,
+    step=0.05,
+    help="The target retention rate for the FSRS algorithm"
+)
+
+# Initialize scheduler with the selected retention value
+if 'desired_retention' not in st.session_state or st.session_state.desired_retention != desired_retention:
+    st.session_state.desired_retention = desired_retention
+    st.session_state.scheduler = Scheduler(desired_retention=desired_retention)
+    
+scheduler = st.session_state.scheduler
 
 if 'card' not in st.session_state:
     st.session_state.card = Card()
