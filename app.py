@@ -85,10 +85,7 @@ if 'card' not in st.session_state:
 if 'prev_card' not in st.session_state:
     st.session_state.prev_card = None
 
-prev_card = st.session_state.prev_card
-card = st.session_state.card
-
-display_info(card=card, scheduler=scheduler)
+display_info(card=st.session_state.card, scheduler=scheduler)
 
 # TODO: add current card state info
 # count how many reviews the card has gotten
@@ -100,26 +97,26 @@ col1, col2, col3, col4, col5, col6 = st.columns(6)
 
 with col2:
     if st.button("Again"):
-        st.session_state.prev_card = deepcopy(card)
-        st.session_state.card, _ = scheduler.review_card(card=card, rating=Rating.Again, review_datetime=card.due)
+        st.session_state.prev_card = deepcopy(st.session_state.card)
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Again, review_datetime=st.session_state.card.due)
         st.rerun()
 
 with col3:
     if st.button("Hard"):
-        st.session_state.prev_card = deepcopy(card)
-        st.session_state.card, _ = scheduler.review_card(card=card, rating=Rating.Hard, review_datetime=card.due)
+        st.session_state.prev_card = deepcopy(st.session_state.card)
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Hard, review_datetime=st.session_state.card.due)
         st.rerun()
 
 with col4:
     if st.button("Good"):
-        st.session_state.prev_card = deepcopy(card)
-        st.session_state.card, _ = scheduler.review_card(card=card, rating=Rating.Good, review_datetime=card.due)
+        st.session_state.prev_card = deepcopy(st.session_state.card)
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Good, review_datetime=st.session_state.card.due)
         st.rerun()
 
 with col5:
     if st.button("Easy"):
-        st.session_state.prev_card = deepcopy(card)
-        st.session_state.card, _ = scheduler.review_card(card=card, rating=Rating.Easy, review_datetime=card.due)
+        st.session_state.prev_card = deepcopy(st.session_state.card)
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Easy, review_datetime=st.session_state.card.due)
         st.rerun()
 
 st.markdown("")
