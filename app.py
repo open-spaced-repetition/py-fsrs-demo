@@ -2,28 +2,21 @@ import streamlit as st
 from fsrs import Scheduler, Card, Rating, State
 from datetime import timedelta
 import matplotlib.pyplot as plt
-import math
 from copy import deepcopy
+from streamlit_extras.stylable_container import stylable_container
 
 
 def display_info(*, card: Card, scheduler: Scheduler):
+    plt.figure(figsize=(7, 4))
+
     stability = card.stability
 
-    print(f"state = {repr(card.state)}")
     if card.state == State.Review:
         days_till_due = (card.due - card.last_review).days
         plt.axvline(x=days_till_due, color="red", linestyle="--", linewidth=1)
-        print(f"days till due: {days_till_due}")
 
     elif card.state == State.Learning:
-        num_learning_steps = len(scheduler.learning_steps)
-        print(f"learning step {card.step + 1} of {num_learning_steps}")
-
         plt.axvline(x=0, color="red", linestyle="--", linewidth=1)
-        minutes_till_due = math.ceil(
-            scheduler.learning_steps[card.step].total_seconds() / 60
-        )
-        print(f"minutes till due: {minutes_till_due}")
 
     elif card.state == State.Relearning:
         num_relearning_steps = len(scheduler.relearning_steps)
@@ -35,10 +28,6 @@ def display_info(*, card: Card, scheduler: Scheduler):
             linestyle="--",
             linewidth=1,
         )
-        minutes_till_due = math.ceil(
-            scheduler.relearning_steps[card.step].total_seconds() / 60
-        )
-        print(f"minutes till due: {minutes_till_due}")
 
     if stability is not None:
         days_range = range(0, 1000)
@@ -51,7 +40,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
 
         plt.plot(days_range, retrievabilities)
 
-    plt.xlabel("Days")
+    plt.xlabel("Days since last review\n(up to 1,000)")
     plt.ylabel("Retrievability")
     plt.title("FSRS Forgetting Curve")
     plt.axhline(
@@ -72,9 +61,8 @@ def display_info(*, card: Card, scheduler: Scheduler):
     plt.clf()
 
 
-st.set_page_config(page_title="Py-FSRS Demo", page_icon="osr_logo.png")
+st.set_page_config(page_title="Interactive Forgetting Curve", page_icon="osr_logo.png")
 
-# TODO: add link to the demo repo and to py-fsrs
 
 # Add slider for desired retention value
 desired_retention = st.slider(
@@ -124,71 +112,118 @@ scheduler = st.session_state.scheduler
 
 display_info(card=st.session_state.card, scheduler=scheduler)
 
-# TODO: add current card state info
-# count how many reviews the card has gotten
-
-# maybe display key statistics and advanced statistics in different visual sections?
-
-st.markdown("---")
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 
 with col2:
-    if st.button("Again"):
-        rating = Rating.Again
-        st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.prev_rating = rating
-        st.session_state.card, _ = scheduler.review_card(
-            card=st.session_state.card,
-            rating=rating,
-            review_datetime=st.session_state.card.due,
-        )
-        st.rerun()
+    with stylable_container(
+        "again",
+        css_styles="""
+        button {
+            background-color: #d32f2f;
+            color: white;
+        }
+        """,
+    ):
+        if st.button("Again"):
+            rating = Rating.Again
+            st.session_state.prev_card = deepcopy(st.session_state.card)
+            st.session_state.prev_rating = rating
+            st.session_state.card, _ = scheduler.review_card(
+                card=st.session_state.card,
+                rating=rating,
+                review_datetime=st.session_state.card.due,
+            )
+            st.rerun()
 
 with col3:
-    if st.button("Hard"):
-        rating = Rating.Hard
-        st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.prev_rating = rating
-        st.session_state.card, _ = scheduler.review_card(
-            card=st.session_state.card,
-            rating=rating,
-            review_datetime=st.session_state.card.due,
-        )
-        st.rerun()
+    with stylable_container(
+        "hard",
+        css_styles="""
+        button {
+            background-color: #455a64;
+            color: white;
+        }""",
+    ):
+        if st.button("Hard"):
+            rating = Rating.Hard
+            st.session_state.prev_card = deepcopy(st.session_state.card)
+            st.session_state.prev_rating = rating
+            st.session_state.card, _ = scheduler.review_card(
+                card=st.session_state.card,
+                rating=rating,
+                review_datetime=st.session_state.card.due,
+            )
+            st.rerun()
 
 with col4:
-    if st.button("Good"):
-        rating = Rating.Good
-        st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.prev_rating = rating
-        st.session_state.card, _ = scheduler.review_card(
-            card=st.session_state.card,
-            rating=rating,
-            review_datetime=st.session_state.card.due,
-        )
-        st.rerun()
+    with stylable_container(
+        "good",
+        css_styles="""
+        button {
+            background-color: #4caf50;
+            color: white;
+        }""",
+    ):
+        if st.button("Good"):
+            rating = Rating.Good
+            st.session_state.prev_card = deepcopy(st.session_state.card)
+            st.session_state.prev_rating = rating
+            st.session_state.card, _ = scheduler.review_card(
+                card=st.session_state.card,
+                rating=rating,
+                review_datetime=st.session_state.card.due,
+            )
+            st.rerun()
 
 with col5:
-    if st.button("Easy"):
-        rating = Rating.Easy
-        st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.prev_rating = rating
-        st.session_state.card, _ = scheduler.review_card(
-            card=st.session_state.card,
-            rating=rating,
-            review_datetime=st.session_state.card.due,
-        )
-        st.rerun()
+    with stylable_container(
+        "easy",
+        css_styles="""
+        button {
+            background-color: #03a9f4;
+            color: white;
+        }""",
+    ):
+        if st.button("Easy"):
+            rating = Rating.Easy
+            st.session_state.prev_card = deepcopy(st.session_state.card)
+            st.session_state.prev_rating = rating
+            st.session_state.card, _ = scheduler.review_card(
+                card=st.session_state.card,
+                rating=rating,
+                review_datetime=st.session_state.card.due,
+            )
+            st.rerun()
 
-st.markdown("")
 st.markdown("")
 st.markdown("")
 col1, col2, col3, col4, col5 = st.columns(5)
 with col3:  # Middle column
-    if st.button("Reset Card"):
+    if st.button("Reset Card 🔄"):
         st.session_state.prev_card = None
         st.session_state.card = Card()
         st.rerun()
 
+st.markdown("---")
 
-# TODO: add some notes below explaining potentially confusing parts of this app e.g., what retrievability means, what again, hard, good and easy mean
+st.markdown(
+    "*([Link](https://github.com/open-spaced-repetition/py-fsrs) to py-fsrs and [link](https://github.com/open-spaced-repetition/py-fsrs-demo) for demo source code)*"
+)
+
+st.markdown(
+    "*([Link](https://en.wikipedia.org/wiki/Forgetting_curve) to forgetting curve wikipedia article.)*"
+)
+
+st.markdown(
+    "This forgetting curve in particular uses the [FSRS](https://github.com/open-spaced-repetition/free-spaced-repetition-scheduler) model."
+)
+
+st.markdown(
+    "**Retrievability** is the predicted probability that a card is correctly recalled at the time of review. **Hard**, **Good** and **Easy** all count as correctly recalling the card. Only **Again** counts as a failure of recall."
+)
+
+st.markdown(
+    "**Desired Retention** is the rate that determines when a learner should review a card. A card becomes due as soon as it's retrievability falls below the desired retention. Higher desired retention rates generally lead to more reviews and shorter spaces between reviews."
+)
+
+st.markdown("(And yes, this app is clunky. It's a streamlit app)")
