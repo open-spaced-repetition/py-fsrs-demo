@@ -14,20 +14,20 @@ def display_info(*, card: Card, scheduler: Scheduler):
 
     if card.state == State.Review:
         days_till_due = (card.due - card.last_review).days
-        plt.title(f"FSRS Forgetting Curve\n\n(Card due in {days_till_due} days)")
+        plt.title(f"FSRS Forgetting Curve\n(Card due in {days_till_due} days)")
         plt.axvline(x=days_till_due, color="red", linestyle="--", linewidth=1)
 
     elif card.state == State.Learning:
         minutes_till_due = math.ceil(scheduler.learning_steps[card.step].total_seconds() / 60)
         if minutes_till_due == 1:
-            plt.title(f"FSRS Forgetting Curve\n\n(Card due in {minutes_till_due} minute)")
+            plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minute)")
         else:
-            plt.title(f"FSRS Forgetting Curve\n\n(Card due in {minutes_till_due} minutes)")
+            plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)")
         plt.axvline(x=0, color="red", linestyle="--", linewidth=1)
 
     elif card.state == State.Relearning:
         minutes_till_due = math.ceil(scheduler.relearning_steps[card.step].total_seconds() / 60)
-        plt.title(f"FSRS Forgetting Curve\n\n(Card due in {minutes_till_due} minutes)")
+        plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)")
         plt.axvline(
             x=0,
             color="red",
