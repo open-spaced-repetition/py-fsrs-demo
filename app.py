@@ -72,18 +72,35 @@ desired_retention = st.slider(
     help="The target retention rate for the FSRS algorithm"
 )
 
-# Initialize scheduler with the selected retention value
-if 'desired_retention' not in st.session_state or st.session_state.desired_retention != desired_retention:
-    st.session_state.desired_retention = desired_retention
-    st.session_state.scheduler = Scheduler(desired_retention=desired_retention, enable_fuzzing=False)
-
-scheduler = st.session_state.scheduler
-
 if 'card' not in st.session_state:
     st.session_state.card = Card()
 
 if 'prev_card' not in st.session_state:
     st.session_state.prev_card = None
+
+if 'prev_rating' not in st.session_state:
+    st.session_state.prev_rating = None
+
+# TODO: look into potentially simplifying logic around session_state for scheduler/desired_retention
+
+# Initialize scheduler with the selected retention value
+if 'desired_retention' not in st.session_state:
+    st.session_state.desired_retention = desired_retention
+    st.session_state.scheduler = Scheduler(desired_retention=desired_retention, enable_fuzzing=False)
+    
+elif st.session_state.desired_retention != desired_retention:
+
+    st.session_state.desired_retention = desired_retention
+    st.session_state.scheduler = Scheduler(desired_retention=desired_retention, enable_fuzzing=False)
+
+    # get previous rating
+
+    if st.session_state.prev_card is not None:
+
+        st.session_state.card, _ = st.session_state.scheduler.review_card(card=st.session_state.prev_card, rating=st.session_state.prev_rating, review_datetime=st.session_state.card.last_review)
+
+
+scheduler = st.session_state.scheduler
 
 display_info(card=st.session_state.card, scheduler=scheduler)
 
@@ -97,26 +114,34 @@ col1, col2, col3, col4, col5, col6 = st.columns(6)
 
 with col2:
     if st.button("Again"):
+        rating = Rating.Again
         st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Again, review_datetime=st.session_state.card.due)
+        st.session_state.prev_rating = rating
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=rating, review_datetime=st.session_state.card.due)
         st.rerun()
 
 with col3:
     if st.button("Hard"):
+        rating = Rating.Hard
         st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Hard, review_datetime=st.session_state.card.due)
+        st.session_state.prev_rating = rating
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=rating, review_datetime=st.session_state.card.due)
         st.rerun()
 
 with col4:
     if st.button("Good"):
+        rating = Rating.Good
         st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Good, review_datetime=st.session_state.card.due)
+        st.session_state.prev_rating = rating
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=rating, review_datetime=st.session_state.card.due)
         st.rerun()
 
 with col5:
     if st.button("Easy"):
+        rating = Rating.Easy
         st.session_state.prev_card = deepcopy(st.session_state.card)
-        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=Rating.Easy, review_datetime=st.session_state.card.due)
+        st.session_state.prev_rating = rating
+        st.session_state.card, _ = scheduler.review_card(card=st.session_state.card, rating=rating, review_datetime=st.session_state.card.due)
         st.rerun()
 
 st.markdown("")
