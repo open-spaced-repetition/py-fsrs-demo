@@ -232,7 +232,7 @@ st.markdown(
 )
 
 st.markdown(
-    "**Desired Retention** is the rate that determines when a learner should review a card. A card becomes due as soon as it's retrievability falls below the desired retention. Higher desired retention rates generally lead to more reviews and shorter spaces between reviews."
+    "**Desired Retention** is the rate that determines when a learner should review a card. A card becomes due as soon as it's retrievability falls below the desired retention. Higher desired retention rates generally lead to shorter spaces between reviews and thus more frequent reviews."
 )
 
 st.markdown("(Apologies to any mobile users! Streamlit apps are pretty clunky and are not responsive...)")
