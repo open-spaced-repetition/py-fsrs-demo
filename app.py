@@ -239,7 +239,7 @@ st.markdown(
 )
 
 st.markdown(
-    "This forgetting curve in particular uses the [FSRS](https://github.com/open-spaced-repetition/free-spaced-repetition-scheduler) model."
+    "This forgetting curve in particular uses the [FSRS](https://github.com/open-spaced-repetition/free-spaced-repetition-scheduler) model with the default, non-optimized parameters."
 )
 
 st.markdown(
