@@ -6,6 +6,7 @@ from copy import deepcopy
 from streamlit_extras.stylable_container import stylable_container
 import math
 
+# TODO: refactor this
 
 def display_info(*, card: Card, scheduler: Scheduler):
     plt.figure(figsize=(7, 4))
@@ -50,6 +51,8 @@ def display_info(*, card: Card, scheduler: Scheduler):
         ]
 
         plt.plot(days_range, retrievabilities, linewidth=2)
+    else:
+        plt.xlim(0, 1000)
 
     plt.xlabel("Days")
     plt.ylabel("Retrievability")
@@ -92,8 +95,6 @@ if "prev_card" not in st.session_state:
 
 if "prev_rating" not in st.session_state:
     st.session_state.prev_rating = None
-
-# TODO: look into potentially simplifying logic around session_state for scheduler/desired_retention
 
 # Initialize scheduler with the selected retention value
 if "desired_retention" not in st.session_state:
