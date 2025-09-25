@@ -36,7 +36,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
         )
 
     if stability is not None:
-        days_range = range(0, 1000)
+        days_range = range(0, 1000, 10)
         retrievabilities = [
             scheduler.get_card_retrievability(
                 card=card, current_datetime=card.last_review + timedelta(days=days)
