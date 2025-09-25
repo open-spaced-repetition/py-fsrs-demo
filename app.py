@@ -11,7 +11,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
     plt.figure(figsize=(7, 4))
 
     stability = card.stability
-
+    days_till_due = None
     if card.state == State.Review:
         days_till_due = (card.due - card.last_review).days
         plt.title(f"FSRS Forgetting Curve\n(Card due in {days_till_due} days)")
@@ -36,7 +36,12 @@ def display_info(*, card: Card, scheduler: Scheduler):
         )
 
     if stability is not None:
-        days_range = range(0, 1000, 10)
+        if days_till_due is not None and days_till_due > 1000:
+            days_range = range(0, days_till_due, 10)
+            plt.xlim(0, days_till_due)
+        else:
+            days_range = range(0, 1000, 10)
+            plt.xlim(0, 1000)
         retrievabilities = [
             scheduler.get_card_retrievability(
                 card=card, current_datetime=card.last_review + timedelta(days=days)
@@ -46,7 +51,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
 
         plt.plot(days_range, retrievabilities)
 
-    plt.xlabel("Days\n(up to 1,000)")
+    plt.xlabel("Days")
     plt.ylabel("Retrievability")
     plt.axhline(
         y=scheduler.desired_retention,
@@ -55,8 +60,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
         linewidth=1,
         label="Desired Retention",
     )
-
-    plt.xlim(0, 1000)
+    
     plt.ylim(0.4, 1)
 
     plt.legend()
@@ -94,13 +98,13 @@ if "prev_rating" not in st.session_state:
 if "desired_retention" not in st.session_state:
     st.session_state.desired_retention = desired_retention
     st.session_state.scheduler = Scheduler(
-        desired_retention=desired_retention, enable_fuzzing=False
+        desired_retention=desired_retention, enable_fuzzing=False, maximum_interval=math.inf
     )
 
 elif st.session_state.desired_retention != desired_retention:
     st.session_state.desired_retention = desired_retention
     st.session_state.scheduler = Scheduler(
-        desired_retention=desired_retention, enable_fuzzing=False
+        desired_retention=desired_retention, enable_fuzzing=False, maximum_interval=math.inf
     )
 
     # get previous rating
