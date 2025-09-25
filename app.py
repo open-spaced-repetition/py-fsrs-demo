@@ -78,7 +78,7 @@ st.set_page_config(page_title="Interactive Forgetting Curve", page_icon="osr_log
 desired_retention = st.slider(
     "Desired Retention",
     min_value=0.50,
-    max_value=0.95,
+    max_value=0.99,
     value=0.9,
     step=0.01,
     help="The target retention rate for the FSRS algorithm",
