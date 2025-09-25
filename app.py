@@ -120,6 +120,20 @@ elif st.session_state.desired_retention != desired_retention:
 
 scheduler = st.session_state.scheduler
 
+# UNCOMMENT THE BELOW BLOCK TO SEE CARD STABILITY AND DIFFICULTY
+# stability = (
+#     f"{st.session_state.card.stability:.4f}"
+#     if st.session_state.card.stability is not None
+#     else "None"
+# )
+# difficulty = (
+#     f"{st.session_state.card.difficulty:.4f}"
+#     if st.session_state.card.difficulty is not None
+#     else "None"
+# )
+# st.markdown(f"<div style='text-align: center;'>(Card Stability= {stability}, Difficulty={difficulty})</div>", unsafe_allow_html=True)
+# st.markdown("")
+
 display_info(card=st.session_state.card, scheduler=scheduler)
 
 col1, col2, col3, col4, col5, col6 = st.columns(6)
