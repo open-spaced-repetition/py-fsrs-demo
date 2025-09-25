@@ -15,7 +15,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
     if card.state == State.Review:
         days_till_due = (card.due - card.last_review).days
         plt.title(f"FSRS Forgetting Curve\n(Card due in {days_till_due} days)")
-        plt.axvline(x=days_till_due, color="red", linestyle="--", linewidth=1)
+        plt.axvline(x=days_till_due, color="grey", linestyle="--", linewidth=1)
 
     elif card.state == State.Learning:
         minutes_till_due = math.ceil(scheduler.learning_steps[card.step].total_seconds() / 60)
@@ -23,14 +23,14 @@ def display_info(*, card: Card, scheduler: Scheduler):
             plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minute)")
         else:
             plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)")
-        plt.axvline(x=0, color="red", linestyle="--", linewidth=1)
+        plt.axvline(x=0, color="grey", linestyle="--", linewidth=1)
 
     elif card.state == State.Relearning:
         minutes_till_due = math.ceil(scheduler.relearning_steps[card.step].total_seconds() / 60)
         plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)")
         plt.axvline(
             x=0,
-            color="red",
+            color="grey",
             linestyle="--",
             linewidth=1,
         )
@@ -49,16 +49,17 @@ def display_info(*, card: Card, scheduler: Scheduler):
             for days in days_range
         ]
 
-        plt.plot(days_range, retrievabilities)
+        plt.plot(days_range, retrievabilities, linewidth=2)
 
     plt.xlabel("Days")
     plt.ylabel("Retrievability")
     plt.axhline(
         y=scheduler.desired_retention,
-        color="grey",
-        linestyle="--",
+        color="#FF4B4B",
+        linestyle="-",
         linewidth=1,
         label="Desired Retention",
+        alpha=1.0,
     )
     
     plt.ylim(0.4, 1)
@@ -79,7 +80,7 @@ desired_retention = st.slider(
     min_value=0.50,
     max_value=0.95,
     value=0.9,
-    step=0.05,
+    step=0.01,
     help="The target retention rate for the FSRS algorithm",
 )
 
