@@ -231,6 +231,8 @@ with col3:  # Middle column
 
 st.markdown("---")
 
+st.markdown("(Apologies to any mobile users! Streamlit apps are super clunky and not responsive...)")
+
 st.markdown(
     "*([Link](https://github.com/open-spaced-repetition/py-fsrs) to py-fsrs and [link](https://github.com/open-spaced-repetition/py-fsrs-demo) for demo source code)*"
 )
@@ -248,7 +250,5 @@ st.markdown(
 )
 
 st.markdown(
-    "**Desired Retention** is the rate that determines when a learner should review a card. A card becomes due as soon as it's retrievability falls below the desired retention. Higher desired retention rates generally lead to shorter spaces between reviews and thus more frequent reviews."
+    "**Desired Retention** is a rate that helps determines when a learner should review a card. A card becomes due as soon as it's retrievability falls below the desired retention. Higher desired retention rates generally lead to shorter spaces between reviews and thus more frequent reviews. A 90% desired retention rate is the default rate in FSRS, though an individual user's optimal retention rate may differ."
 )
-
-st.markdown("(Apologies to any mobile users! Streamlit apps are pretty clunky and are not responsive...)")
