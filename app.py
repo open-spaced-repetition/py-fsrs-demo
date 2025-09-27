@@ -80,7 +80,7 @@ st.set_page_config(page_title="Interactive Forgetting Curve", page_icon="osr_log
 # Add slider for desired retention value
 desired_retention = st.slider(
     "Desired Retention",
-    min_value=0.50,
+    min_value=0.70,
     max_value=0.99,
     value=0.9,
     step=0.01,
