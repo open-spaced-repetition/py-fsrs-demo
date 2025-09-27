@@ -8,6 +8,7 @@ import math
 
 # TODO: refactor this
 
+
 def display_info(*, card: Card, scheduler: Scheduler):
     plt.figure(figsize=(7, 4))
 
@@ -19,15 +20,21 @@ def display_info(*, card: Card, scheduler: Scheduler):
         plt.axvline(x=days_till_due, color="grey", linestyle="--", linewidth=1)
 
     elif card.state == State.Learning:
-        minutes_till_due = math.ceil(scheduler.learning_steps[card.step].total_seconds() / 60)
+        minutes_till_due = math.ceil(
+            scheduler.learning_steps[card.step].total_seconds() / 60
+        )
         if minutes_till_due == 1:
             plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minute)")
         else:
-            plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)")
+            plt.title(
+                f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)"
+            )
         plt.axvline(x=0, color="grey", linestyle="--", linewidth=1)
 
     elif card.state == State.Relearning:
-        minutes_till_due = math.ceil(scheduler.relearning_steps[card.step].total_seconds() / 60)
+        minutes_till_due = math.ceil(
+            scheduler.relearning_steps[card.step].total_seconds() / 60
+        )
         plt.title(f"FSRS Forgetting Curve\n(Card due in {minutes_till_due} minutes)")
         plt.axvline(
             x=0,
@@ -64,7 +71,7 @@ def display_info(*, card: Card, scheduler: Scheduler):
         label="Desired Retention",
         alpha=1.0,
     )
-    
+
     plt.ylim(0.4, 1)
 
     plt.legend()
@@ -100,13 +107,17 @@ if "prev_rating" not in st.session_state:
 if "desired_retention" not in st.session_state:
     st.session_state.desired_retention = desired_retention
     st.session_state.scheduler = Scheduler(
-        desired_retention=desired_retention, enable_fuzzing=False, maximum_interval=math.inf
+        desired_retention=desired_retention,
+        enable_fuzzing=False,
+        maximum_interval=math.inf,
     )
 
 elif st.session_state.desired_retention != desired_retention:
     st.session_state.desired_retention = desired_retention
     st.session_state.scheduler = Scheduler(
-        desired_retention=desired_retention, enable_fuzzing=False, maximum_interval=math.inf
+        desired_retention=desired_retention,
+        enable_fuzzing=False,
+        maximum_interval=math.inf,
     )
 
     # get previous rating
@@ -231,7 +242,9 @@ with col3:  # Middle column
 
 st.markdown("---")
 
-st.markdown("(Apologies to any mobile users! Streamlit apps are super clunky and not responsive...)")
+st.markdown(
+    "(Apologies to any mobile users! Streamlit apps are super clunky and not responsive...)"
+)
 
 st.markdown(
     "*([Link](https://github.com/open-spaced-repetition/py-fsrs) to py-fsrs and [link](https://github.com/open-spaced-repetition/py-fsrs-demo) for demo source code)*"
